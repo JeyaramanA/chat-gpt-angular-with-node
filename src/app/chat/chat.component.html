@@ -1,0 +1,66 @@
+<div class="chatgpt-container">
+  <div class="chatgpt-chat-container">
+    <div
+      class="chatgpt-chat-message"
+      [ngClass]="{ ai: !message.isUserMessage }"
+      *ngFor="let message of messages"
+    >
+      <!-- User Part -->
+      <div *ngIf="message.isUserMessage" class="chatgpt-chat-bubble">
+        <div class="chatgpt-chat-image-container">
+          <img class="chatgpt-chat-image" src="../../assets/user.svg" />
+        </div>
+        <div class="chatgpt-chat-text">{{ message.text }}</div>
+      </div>
+      <!-- Bot Part-->
+      <div *ngIf="!message.isUserMessage" class="chatgpt-chat-bubble">
+        <div class="chatgpt-chat-image-container">
+          <img class="chatgpt-chat-image" src="../../assets/bot.svg" />
+        </div>
+        <div class="chatgpt-chat-text" *ngIf="!message.isLoader">
+          <div *ngIf="!message.typing">{{ message.text }}</div>
+          <div *ngIf="message.typing">{{ message.typingText }}</div>
+          <!-- {{ message.text }} -->
+        </div>
+      </div>
+      <!-- Loading part -->
+      <div
+        class="chatgpt-chat-bubble bot-bubble ai"
+        *ngIf="message.isLoader && id === message.id"
+      >
+        <div class="chatgpt-chat-image-container">
+          <img class="chatgpt-chat-image" src="../../assets/bot.svg" />
+        </div>
+        <div class="chatgpt-chat-text">
+          {{ loaderText() }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chatgpt-input-container">
+    <input
+      class="chatgpt-input"
+      [(ngModel)]="prompt"
+      placeholder="Ask me something"
+    />
+    <button
+      class="chatgpt-send-button"
+      (click)="chatStripe()"
+      *ngIf="!isLoading"
+    >
+      <img class="chatgpt-send-image" src="../../assets/send.svg" />
+    </button>
+    <button class="chatgpt-send-button cpn" *ngIf="isLoading">
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    </button>
+  </div>
+</div>
+<div class="chatgpt-right-container">
+  <ul class="list">
+    <li (click)="selectPrompt(item)" class="item" *ngFor="let item of prompts">
+      {{ item }}
+    </li>
+  </ul>
+</div>
